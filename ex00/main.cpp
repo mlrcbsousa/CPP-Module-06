@@ -6,33 +6,11 @@
 /*   By: msousa <mlrcbsousa@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 18:20:00 by msousa            #+#    #+#             */
-/*   Updated: 2022/04/15 21:01:38 by msousa           ###   ########.fr       */
+/*   Updated: 2022/04/17 18:31:33 by msousa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <cstdlib>
-#include <cmath>
-
-# define LOG(x) std::cout << x << std::endl
-# define ERROR(x) std::cerr << x << std::endl
-
-enum e_type {
-	INVALID,
-	CHAR,
-	INT,
-	FLOAT,
-	DOUBLE,
-};
-
-typedef bool (*t_tcheck)(std::string);
-
-bool	is_char(std::string literal);
-bool	is_int(std::string literal);
-bool	is_float(std::string literal);
-bool	is_double(std::string literal);
-
-/* ----------------- */
+#include "main.hpp"
 
 bool	is_char(std::string literal)
 {
@@ -51,24 +29,20 @@ bool	is_int(std::string literal)
 
 	char*	end;
     long	value = strtol(literal.c_str(), &end, 10);
-    return 	value && *end == '\0';
+    return 	value && *end == '\0' && value >= INT_MIN && value <= INT_MAX;
 }
 
 bool	is_float(std::string literal)
 {
-	// if (literal == "-inff" || literal == "+inff" || literal == "nanf")
-	// 	return true;
 	size_t	dlength = literal.length() - 1;
 	return literal.at(dlength) == 'f' && is_double(literal.substr(0, dlength));
 }
 
 bool	is_double(std::string literal)
 {
-	// if (literal == "-inf" || literal == "+inf" || literal == "nan")
-	// 	return true;
 	char*	end;
     double	value = strtod(literal.c_str(), &end);
-    return 	end != literal.c_str() && *end == '\0' && value != HUGE_VAL;
+    return 	end != literal.c_str() && *end == '\0' && value;// != HUGE_VAL;
 }
 
 e_type	get_type(std::string literal)
@@ -79,6 +53,86 @@ e_type	get_type(std::string literal)
 		if (tchecks[i](literal))
 			return (e_type)(i + 1);
 	return INVALID;
+}
+
+void	print_impossible(std::string type) { LOG(type << ": impossible"); }
+void	print_int(int d) { LOG("int: " << d); }
+
+void	print_char(char c)
+{
+	if (std::isprint(c))
+        LOG("char: '" << c << "'");
+    else
+        LOG("char: Non displayable");
+}
+
+void	print_float(float f)
+{
+	LOG("float: " << std::fixed << std::setprecision(1) << f << "f");
+}
+
+void	print_double(double d)
+{
+	LOG("double: " << std::fixed << std::setprecision(1) << d);
+}
+
+// convert it to the three other types
+// display the results
+void	print(char c)
+{
+	print_char(c);
+	print_int(static_cast<int>(c));
+	print_float(static_cast<float>(c));
+	print_double(static_cast<double>(c));
+}
+
+void	print(int i)
+{
+	if (i < LimitsChar::min() || i > LimitsChar::max())
+		print_impossible("char");
+	else
+		print_char(static_cast<char>(i));
+
+	print_int(i);
+	print_float(static_cast<float>(i));
+	print_double(static_cast<double>(i));
+}
+
+void	print(float f)
+{
+	// A NaN never compares equal to itself.
+	if (f < LimitsChar::min() || f > LimitsChar::max() || f != f)
+		print_impossible("char");
+	else
+		print_char(static_cast<char>(f));
+
+	if (f < LimitsInt::min() || f > LimitsInt::max() || f != f)
+        print_impossible("int");
+    else
+        print_int(static_cast<int>(f));
+
+	print_float(f);
+	print_double(static_cast<double>(f));
+}
+
+void	print(double d)
+{
+	if (d < LimitsChar::min() || d > LimitsChar::max() || d != d)
+		print_impossible("char");
+	else
+		print_char(static_cast<char>(d));
+
+	if (d < LimitsInt::min() || d > LimitsInt::max() || d != d)
+        print_impossible("int");
+    else
+        print_int(static_cast<int>(d));
+
+	if (d < LimitsFloat::min() || d > LimitsFloat::max())
+		print_impossible("float");
+    else
+        print_float(static_cast<float>(d));
+
+	print_double(d);
 }
 
 int	main( int argc, char* argv[] )
@@ -92,45 +146,27 @@ int	main( int argc, char* argv[] )
 	e_type	type = get_type(argv[1]);
 
 	if (type == INVALID) {
-		ERROR("invalid type");
+		ERROR("invalid type or out of bounds");
 		return 1;
 	}
 
-	char	c = 0;
-	int		i = 0;
-	float	f = 0;
-	double	d = 0;
-
 	// convert it to its actual type
-	// convert it to the three other types
-	LOG(type);
 	if (type == CHAR) {
-		c = argv[1][0];
-		i = c;
-		f = c;
-		d = c;
+		char	c = argv[1][0];
+		print(c);
 	} else if (type == INT) {
-		i = std::atoi(argv[1]);
-		c = i; //static_cast<char>(i);
-		f = i;
-		d = i;
+		char*	end;
+    	int		i = strtol(argv[1], &end, 10);
+		print(i);
 	} else if (type == FLOAT) {
-		f = std::atof(argv[1]);
-		c = f;
-		i = f;
-		d = f;
+		char*	end;
+    	float	f = static_cast<float>(strtod(argv[1], &end));
+		print(f);
 	} else if (type == DOUBLE) {
-		d = static_cast<double>(std::atof(argv[1]));
-		c = d;
-		i = d;
-		f = d;
+		char*	end;
+    	double	d = strtod(argv[1], &end);
+		print(d);
 	}
-
-	// display the results
-	LOG("char: " << c);
-	LOG("int: " << i);
-	LOG("float: " << f);
-	LOG("double: " << d);
 
 	return 0;
 }

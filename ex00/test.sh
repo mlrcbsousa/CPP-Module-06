@@ -14,6 +14,41 @@ echo "====== nan ======"
 # float: nanf
 # double: nan
 echo
+echo "====== nanf ======"
+./convert nanf
+# char: impossible
+# int: impossible
+# float: nanf
+# double: nan
+echo
+echo "====== +inf ======"
+./convert +inf
+# char: impossible
+# int: impossible
+# float: +inff
+# double: +inf
+echo
+echo "====== +inff ======"
+./convert +inff
+# char: impossible
+# int: impossible
+# float: +inff
+# double: +inf
+echo
+echo "====== -inf ======"
+./convert -inf
+# char: impossible
+# int: impossible
+# float: -inff
+# double: -inf
+echo
+echo "====== -inff ======"
+./convert -inff
+# char: impossible
+# int: impossible
+# float: -inff
+# double: -inf
+echo
 echo "====== 42.0f ======"
 ./convert 42.0f
 # char: '*'
