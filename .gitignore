@@ -30,6 +30,6 @@
 *.exe
 *.out
 *.app
-# ex00/convert
+ex00/convert
 ex01/convert
 ex02/convert
