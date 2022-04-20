@@ -6,7 +6,7 @@
 /*   By: msousa <mlrcbsousa@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 18:20:00 by msousa            #+#    #+#             */
-/*   Updated: 2022/04/20 23:11:34 by msousa           ###   ########.fr       */
+/*   Updated: 2022/04/20 23:14:33 by msousa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	identify(Base* p)
 			C * c = dynamic_cast<C *>(p);
 
 			if (!c) {
-
+				ERROR("invalid type");
 			} else { LOG("C"); }
 		} else { LOG("B"); }
 	} else { LOG("A"); }
@@ -68,7 +68,7 @@ void	identify(Base& p)
 				LOG("C");
 			}
 			catch (std::bad_cast & e) {
-				e.what();
+				ERROR(e.what());
 			}
 		}
 	}
@@ -83,6 +83,13 @@ int main(void)
 
 	identify(random);
 	identify(*random);
+	delete random;
+
+	random = new Base();
+
+	identify(random);
+	identify(*random);
+	delete random;
 
     return (0);
 }
