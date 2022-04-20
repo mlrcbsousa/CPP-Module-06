@@ -6,7 +6,7 @@
 /*   By: msousa <mlrcbsousa@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 18:20:00 by msousa            #+#    #+#             */
-/*   Updated: 2022/04/20 22:51:51 by msousa           ###   ########.fr       */
+/*   Updated: 2022/04/20 23:09:06 by msousa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,9 @@ Base *	generate(void)
 	int type = rand() % 3;
 
 	switch(type) {
-		case 0 :
-			random = new A;
-			LOG("A");
-			break;
-		case 1 :
-			random = new B;
-			LOG("B");
-			break;
-		case 2 :
-			random = new C;
-			LOG("C");
-			break;
+		case 0 : random = new A; break;
+		case 1 : random = new B; break;
+		case 2 : random = new C; break;
 	}
 
 	return random;
@@ -40,13 +31,47 @@ Base *	generate(void)
 
 void	identify(Base* p)
 {
-	(void)p;
+	A * a = dynamic_cast<A *>(p);
+
+	if (!a) {
+		B * b = dynamic_cast<B *>(p);
+
+		if (!b) {
+			C * c = dynamic_cast<C *>(p);
+
+			if (!c) {
+
+			} else { LOG("C"); }
+		} else { LOG("B"); }
+	} else { LOG("A"); }
 }
 
 void	identify(Base& p)
 {
-	// no pointer
-	(void)p;
+	try {
+		A & a = dynamic_cast<A &>(p);
+		(void)a;
+		LOG("A");
+	}
+	catch (std::bad_cast & e) {
+		(void)e;
+		try {
+			B & b = dynamic_cast<B &>(p);
+			(void)b;
+			LOG("B");
+		}
+		catch (std::bad_cast & e) {
+			(void)e;
+			try {
+				C & c = dynamic_cast<C &>(p);
+				(void)c;
+				LOG("C");
+			}
+			catch (std::bad_cast & e) {
+				(void)e;
+			}
+		}
+	}
 }
 
 int main(void)
