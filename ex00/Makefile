@@ -6,12 +6,12 @@
 #    By: msousa <mlrcbsousa@gmail.com>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/21 21:26:04 by msousa            #+#    #+#              #
-#    Updated: 2022/04/13 18:44:01 by msousa           ###   ########.fr        #
+#    Updated: 2022/04/20 23:33:06 by msousa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CFLAGS	= -Wall -Wextra -Werror -std=c++98
-CC			= clang++
+CC			= c++
 RM			= rm -f
 OBJ			= ${SRC:%.cpp=obj/%.o}
 SRC			= main.cpp
