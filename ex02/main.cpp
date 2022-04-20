@@ -6,7 +6,7 @@
 /*   By: msousa <mlrcbsousa@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 18:20:00 by msousa            #+#    #+#             */
-/*   Updated: 2022/04/20 23:09:06 by msousa           ###   ########.fr       */
+/*   Updated: 2022/04/20 23:11:34 by msousa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	identify(Base& p)
 				LOG("C");
 			}
 			catch (std::bad_cast & e) {
-				(void)e;
+				e.what();
 			}
 		}
 	}
