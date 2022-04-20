@@ -6,7 +6,7 @@
 /*   By: msousa <mlrcbsousa@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 18:20:00 by msousa            #+#    #+#             */
-/*   Updated: 2022/04/20 22:37:55 by msousa           ###   ########.fr       */
+/*   Updated: 2022/04/20 22:51:51 by msousa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,24 @@
 
 Base *	generate(void)
 {
-	Base * random = new A();
+	Base * random;
+
+	int type = rand() % 3;
+
+	switch(type) {
+		case 0 :
+			random = new A;
+			LOG("A");
+			break;
+		case 1 :
+			random = new B;
+			LOG("B");
+			break;
+		case 2 :
+			random = new C;
+			LOG("C");
+			break;
+	}
 
 	return random;
 }
@@ -24,18 +41,19 @@ Base *	generate(void)
 void	identify(Base* p)
 {
 	(void)p;
-	LOG("A");
 }
 
 void	identify(Base& p)
 {
 	// no pointer
 	(void)p;
-	LOG("A");
 }
 
 int main(void)
 {
+	// set seed for random number generator
+	std::srand((unsigned int)time(NULL));
+
 	Base * random = generate();
 
 	identify(random);
